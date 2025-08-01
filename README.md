@@ -1,0 +1,2 @@
+# Costeo-Smart
+CosteoSmart es un sistema completo de gestión diseñado específicamente para restaurantes y negocios gastronómicos que buscan optimizar su rentabilidad a través del control preciso de costos. La plataforma permite registrar y analizar cada componente del negocio, desde los ingredientes individuales hasta los gastos operativos.
