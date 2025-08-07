@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1028801641342",
+    "project_id": "costeo-smart",
+    "storage_bucket": "costeo-smart.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028801641342:android:d76259ac9961889f59d12f",
+        "android_client_info": {
+          "package_name": "com.example.costeosmart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOIZDL_5PYTvn8z4Q6NHg-IG9dzIryWzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
