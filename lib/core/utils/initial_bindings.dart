@@ -1,3 +1,4 @@
+import 'package:costeosmart/features/ingredients/services/ingredient_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,16 +18,18 @@ class InitialBindings extends Bindings {
     // Providers
     Get.put(ApiProvider(), permanent: true);
     Get.put(DatabaseProvider(), permanent: true);
-    
+
     // Services
     Get.put(AuthService(), permanent: true);
+    Get.put(AuthController(), permanent: true);
+
     Get.put(IngredientService(), permanent: true);
     Get.put(RecipeService(), permanent: true);
     Get.put(SalesService(), permanent: true);
     Get.put(AnalyticsService(), permanent: true);
     
     // Controllers globales
-    Get.put(AuthController(), permanent: true);
+    
     Get.put(ThemeController(), permanent: true);
     Get.put(NotificationController(), permanent: true);
   }
@@ -47,13 +50,6 @@ class DatabaseProvider extends GetxService {
   }
 }
 
-
-class IngredientService extends GetxService {
-  Future<IngredientService> init() async {
-    // Inicializar servicio de ingredientes
-    return this;
-  }
-}
 
 class RecipeService extends GetxService {
   Future<RecipeService> init() async {

@@ -67,4 +67,6 @@ class AppRoutes {
   static const String about = '/about';
   static const String privacyPolicy = '/privacy-policy';
   static const String termsOfService = '/terms-of-service';
+
+  
 }

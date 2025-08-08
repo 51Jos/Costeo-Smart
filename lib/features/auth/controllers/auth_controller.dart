@@ -6,38 +6,38 @@ import '../../../core/routes/app_routes.dart';
 
 class AuthController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
-  
+
   // Controladores de texto para formularios
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
-  
+
   // Estados
   final RxBool isLoading = false.obs;
   final RxBool obscurePassword = true.obs;
   final RxBool obscureConfirmPassword = true.obs;
   final RxBool rememberMe = false.obs;
   final RxBool acceptTerms = false.obs;
-  
+
   // Form keys
   final loginFormKey = GlobalKey<FormState>();
   final registerFormKey = GlobalKey<FormState>();
   final forgotPasswordFormKey = GlobalKey<FormState>();
-  
+
   // Getters
   bool get isAuthenticated => _authService.isAuthenticated.value;
   UserModel? get currentUser => _authService.currentUser.value;
   bool get isEmailVerified => currentUser?.isEmailVerified ?? false;
-  
+
   @override
   void onInit() {
     super.onInit();
     // Escuchar cambios en el estado de autenticación
     ever(_authService.isAuthenticated, _handleAuthStateChange);
   }
-  
+
   @override
   void onClose() {
     emailController.dispose();
@@ -47,7 +47,7 @@ class AuthController extends GetxController {
     phoneController.dispose();
     super.onClose();
   }
-  
+
   // Manejar cambios en el estado de autenticación
   void _handleAuthStateChange(bool isAuthenticated) {
     if (isAuthenticated) {
@@ -58,23 +58,23 @@ class AuthController extends GetxController {
       Get.offAllNamed(AppRoutes.login);
     }
   }
-  
+
   // Toggle visibilidad de contraseña
   void togglePasswordVisibility() {
     obscurePassword.value = !obscurePassword.value;
   }
-  
+
   void toggleConfirmPasswordVisibility() {
     obscureConfirmPassword.value = !obscureConfirmPassword.value;
   }
-  
+
   // Registro de usuario
   Future<void> register() async {
     try {
       if (!registerFormKey.currentState!.validate()) {
         return;
       }
-      
+
       if (!acceptTerms.value) {
         Get.snackbar(
           'Términos y Condiciones',
@@ -86,20 +86,22 @@ class AuthController extends GetxController {
         );
         return;
       }
-      
+
       isLoading.value = true;
-      
+
       final user = await _authService.registerWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text,
         name: nameController.text.trim(),
-        phone: phoneController.text.trim().isEmpty ? null : phoneController.text.trim(),
+        phone: phoneController.text.trim().isEmpty
+            ? null
+            : phoneController.text.trim(),
       );
-      
+
       if (user != null) {
         // Limpiar formularios
         _clearControllers();
-        
+
         // Mostrar mensaje de éxito
         Get.snackbar(
           '¡Registro exitoso!',
@@ -110,7 +112,7 @@ class AuthController extends GetxController {
           duration: const Duration(seconds: 5),
           margin: const EdgeInsets.all(16),
         );
-        
+
         // Navegar a la pantalla principal
         Get.offAllNamed(AppRoutes.main);
       }
@@ -128,30 +130,33 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-  
+
   // Login de usuario
   Future<void> login() async {
     try {
       if (!loginFormKey.currentState!.validate()) {
         return;
       }
-      
+
       isLoading.value = true;
-      
+
       final user = await _authService.loginWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text,
       );
-      
+
       if (user != null) {
+        // Actualizar el estado de autenticación
+        _authService.isAuthenticated.value =
+            true; // Asegúrate de que AuthService lo haga
         // Guardar preferencias si "Recordarme" está activo
         if (rememberMe.value) {
           // Implementar guardado de credenciales seguro
         }
-        
+
         // Limpiar formularios
         _clearControllers();
-        
+
         // Mostrar mensaje de bienvenida
         Get.snackbar(
           '¡Bienvenido!',
@@ -162,6 +167,9 @@ class AuthController extends GetxController {
           duration: const Duration(seconds: 3),
           margin: const EdgeInsets.all(16),
         );
+
+        // Redirigir a MainView
+        Get.offAllNamed(AppRoutes.main);
       }
     } catch (e) {
       Get.snackbar(
@@ -177,14 +185,14 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-  
+
   // Login con Google
   Future<void> loginWithGoogle() async {
     try {
       isLoading.value = true;
-      
+
       final user = await _authService.loginWithGoogle();
-      
+
       if (user != null) {
         Get.snackbar(
           '¡Bienvenido!',
@@ -210,18 +218,18 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-  
+
   // Recuperar contraseña
   Future<void> resetPassword() async {
     try {
       if (!forgotPasswordFormKey.currentState!.validate()) {
         return;
       }
-      
+
       isLoading.value = true;
-      
+
       await _authService.resetPassword(emailController.text.trim());
-      
+
       Get.snackbar(
         'Email enviado',
         'Se ha enviado un enlace de recuperación a ${emailController.text}',
@@ -231,7 +239,7 @@ class AuthController extends GetxController {
         duration: const Duration(seconds: 5),
         margin: const EdgeInsets.all(16),
       );
-      
+
       // Volver al login
       Get.back();
       emailController.clear();
@@ -249,12 +257,12 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-  
+
   // Verificar email
   Future<void> checkEmailVerification() async {
     try {
       final isVerified = await _authService.checkEmailVerification();
-      
+
       if (isVerified) {
         Get.snackbar(
           'Email verificado',
@@ -277,17 +285,17 @@ class AuthController extends GetxController {
     } catch (e) {
       // ignore: avoid_print
       print('Error checking email verification: $e');
-        // ignore: avoid_print
+      // ignore: avoid_print
     }
   }
-  
+
   // Reenviar email de verificación
   Future<void> resendVerificationEmail() async {
     try {
       isLoading.value = true;
-      
+
       await _authService.resendVerificationEmail();
-      
+
       Get.snackbar(
         'Email enviado',
         'Se ha reenviado el email de verificación',
@@ -310,7 +318,7 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-  
+
   // Cerrar sesión
   Future<void> logout() async {
     try {
@@ -334,7 +342,7 @@ class AuthController extends GetxController {
           ],
         ),
       );
-      
+
       if (confirm == true) {
         await _authService.logout();
         _clearControllers();
@@ -350,7 +358,7 @@ class AuthController extends GetxController {
       );
     }
   }
-  
+
   // Limpiar controladores
   void _clearControllers() {
     emailController.clear();
@@ -361,19 +369,19 @@ class AuthController extends GetxController {
     rememberMe.value = false;
     acceptTerms.value = false;
   }
-  
+
   // Navegar a registro
   void goToRegister() {
     _clearControllers();
     Get.toNamed(AppRoutes.register);
   }
-  
+
   // Navegar a login
   void goToLogin() {
     _clearControllers();
     Get.toNamed(AppRoutes.login);
   }
-  
+
   // Navegar a recuperar contraseña
   void goToForgotPassword() {
     emailController.clear();

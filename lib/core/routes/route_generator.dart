@@ -7,10 +7,10 @@ import '../../features/auth/views/login_view.dart';
 import '../../features/auth/views/register_view.dart';
 import '../../features/auth/views/forgot_password_view.dart';
 // import '../../features/home/views/main_view.dart';
-// import '../../features/ingredients/views/ingredients_list_view.dart';
-// import '../../features/ingredients/views/ingredient_detail_view.dart';
-// import '../../features/ingredients/views/ingredient_create_view.dart';
-// import '../../features/ingredients/views/ingredient_edit_view.dart';
+import '../../features/ingredients/views/ingredients_list_view.dart';
+import '../../features/ingredients/views/ingredient_detail_view.dart';
+import '../../features/ingredients/views/ingredient_create_view.dart';
+import '../../features/ingredients/views/ingredient_edit_view.dart';
 // import '../../features/bases_sauces/views/bases_sauces_list_view.dart';
 // import '../../features/bases_sauces/views/base_sauce_detail_view.dart';
 // import '../../features/bases_sauces/views/base_sauce_create_view.dart';
@@ -76,6 +76,7 @@ class RouteGenerator {
     GetPage(
       name: AppRoutes.ingredientsList,
       page: () => const IngredientsListView(),
+      binding: IngredientBinding(),
       transition: Transition.rightToLeft,
     ),
     
@@ -277,59 +278,24 @@ class OnboardingView extends StatelessWidget {
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Main - Bottom Navigation'),
-      ),
-    );
-  }
-}
 
-class IngredientsListView extends StatelessWidget {
-  const IngredientsListView({super.key});
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('Ingredients List'),
-      ),
-    );
-  }
-}
-
-class IngredientDetailView extends StatelessWidget {
-  const IngredientDetailView({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Ingredient Detail'),
-      ),
-    );
-  }
-}
-
-class IngredientCreateView extends StatelessWidget {
-  const IngredientCreateView({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Create Ingredient'),
-      ),
-    );
-  }
-}
-
-class IngredientEditView extends StatelessWidget {
-  const IngredientEditView({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Edit Ingredient'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Main - Bottom Navigation'),
+            SizedBox(height: 20), // Espacio entre el texto y el botón
+            ElevatedButton(
+              onPressed: () {
+                Get.toNamed(AppRoutes.ingredientsList); // Redirige a /ingredients/list
+              },
+              child: const Text('Ir a Lista de Ingredientes'),
+            ),
+          ],
+        ),
       ),
     );
   }
