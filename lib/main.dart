@@ -39,7 +39,9 @@ void main() async {
     // Correr la app con bindings
     runApp(
       ScreenUtilInit(
-        designSize: kIsWeb ? const Size(1440, 900) : const Size(375, 812),
+        designSize: kIsWeb && MediaQueryData.fromView(WidgetsBinding.instance.window).size.width > 800
+        ? const Size(1440, 900) 
+        : const Size(375, 812), 
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
